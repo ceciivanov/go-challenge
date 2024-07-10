@@ -12,12 +12,24 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func GetUserFavorites(w http.ResponseWriter, r *http.Request) {
+// Handler struct
+type Handler struct {
+	DataStore *data.DataStore
+}
+
+// NewHandler initializes and returns a new Handler
+func NewHandler(ds *data.DataStore) *Handler {
+	return &Handler{
+		DataStore: ds,
+	}
+}
+
+func (h *Handler) GetUserFavorites(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID, _ := strconv.Atoi(vars["id"])
 
 	// Check if the user exists
-	user, ok := data.Users[userID]
+	user, ok := h.DataStore.Users[userID]
 	if !ok {
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
@@ -28,12 +40,12 @@ func GetUserFavorites(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(user.Favourites)
 }
 
-func AddUserFavorite(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) AddUserFavorite(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID, _ := strconv.Atoi(vars["id"])
 
 	// Check if the user exists
-	user, ok := data.Users[userID]
+	user, ok := h.DataStore.Users[userID]
 	if !ok {
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
@@ -66,20 +78,20 @@ func AddUserFavorite(w http.ResponseWriter, r *http.Request) {
 
 	// Add the new asset with the asset ID as the key to the user's favorites map and save the updated user
 	user.Favourites[newAsset.GetID()] = newAsset
-	data.Users[userID] = user
+	h.DataStore.Users[userID] = user
 
 	// Return the new asset to the client with a 201 Created status
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(newAsset)
 }
 
-func DeleteUserFavorite(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) DeleteUserFavorite(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID, _ := strconv.Atoi(vars["id"])
 	assetID, _ := strconv.Atoi(vars["assetID"])
 
 	// Check if the user exists
-	user, ok := data.Users[userID]
+	user, ok := h.DataStore.Users[userID]
 	if !ok {
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
@@ -93,18 +105,18 @@ func DeleteUserFavorite(w http.ResponseWriter, r *http.Request) {
 
 	// Remove the asset from the user's favorites and save the updated user
 	delete(user.Favourites, assetID)
-	data.Users[userID] = user
+	h.DataStore.Users[userID] = user
 
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func EditUserFavorite(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) EditUserFavorite(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID, _ := strconv.Atoi(vars["id"])
 	assetID, _ := strconv.Atoi(vars["assetID"])
 
 	// Check if the user exists
-	user, ok := data.Users[userID]
+	user, ok := h.DataStore.Users[userID]
 	if !ok {
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
@@ -145,7 +157,7 @@ func EditUserFavorite(w http.ResponseWriter, r *http.Request) {
 
 	// Update the asset in the user's favorites and save the updated user
 	user.Favourites[assetID] = updatedAsset
-	data.Users[userID] = user
+	h.DataStore.Users[userID] = user
 
 	// Return the updated asset to the client with a 200 OK status
 	w.WriteHeader(http.StatusOK)

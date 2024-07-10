@@ -9,15 +9,18 @@ import (
 	"github.com/ceciivanov/go-challenge/pkg/utils"
 )
 
-// Define a global variable map to store users
-var Users map[int]models.User
+// // Define a global variable map to store users
+// var Users map[int]models.User
 
-// Initialize the Users map when the package is loaded
-func init() {
-	Users = make(map[int]models.User)
-}
+// // Initialize the Users map when the package is loaded
+// func init() {
+// 	Users = make(map[int]models.User)
+// }
 
-func GenerateMockData(numberOfUsers, numberOfAssets int) {
+// GenerateMockData generates mock data for users and assets and returns a map of users
+func GenerateMockData(numberOfUsers, numberOfAssets int) map[int]models.User {
+	Users := make(map[int]models.User)
+
 	for i := 1; i <= numberOfUsers; i++ {
 		userID := i
 		user := models.User{
@@ -67,4 +70,6 @@ func GenerateMockData(numberOfUsers, numberOfAssets int) {
 
 		Users[userID] = user
 	}
+
+	return Users
 }

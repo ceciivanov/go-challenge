@@ -7,6 +7,6 @@ curl -X POST http://localhost:8080/users/1/favorites \
 
 curl -X DELETE http://localhost:8080/users/3/favorites/2
 
-curl -X PUT http://localhost:8080/users/1/favorites/10 \
+curl -X PUT http://localhost:8080/users/1/favorites/1 \
      -H "Content-Type: application/json" \
      -d @json/insight.json 
