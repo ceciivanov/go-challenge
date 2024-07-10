@@ -9,7 +9,7 @@ const (
 
 // Asset interface to be implemented by all asset types
 type Asset interface {
-	GetID() string
+	GetID() int
 	GetType() string
 	GetDescription() string
 }

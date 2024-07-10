@@ -8,7 +8,7 @@ type Point struct {
 
 // Chart represents a chart asset
 type Chart struct {
-	ID          string  `json:"id"`
+	ID          int     `json:"id"`
 	Type        string  `json:"type"`
 	Description string  `json:"description"`
 	Title       string  `json:"title"`
@@ -18,7 +18,7 @@ type Chart struct {
 }
 
 // Implement the Asset interface for Chart
-func (c Chart) GetID() string {
+func (c Chart) GetID() int {
 	return c.ID
 }
 

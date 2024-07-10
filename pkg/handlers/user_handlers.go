@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"strconv"
 
 	"github.com/ceciivanov/go-challenge/pkg/data"
 	"github.com/ceciivanov/go-challenge/pkg/models"
@@ -13,7 +14,7 @@ import (
 
 func GetUserFavorites(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	userID := vars["id"]
+	userID, _ := strconv.Atoi(vars["id"])
 
 	// Check if the user exists
 	user, ok := data.Users[userID]
@@ -29,7 +30,7 @@ func GetUserFavorites(w http.ResponseWriter, r *http.Request) {
 
 func AddUserFavorite(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	userID := vars["id"]
+	userID, _ := strconv.Atoi(vars["id"])
 
 	// Check if the user exists
 	user, ok := data.Users[userID]
@@ -54,7 +55,13 @@ func AddUserFavorite(w http.ResponseWriter, r *http.Request) {
 
 	// Check if the user has a favourites map and create one if not
 	if user.Favourites == nil {
-		user.Favourites = make(map[string]models.Asset)
+		user.Favourites = make(map[int]models.Asset)
+	}
+
+	// Check if newAsset's id already exists in the map
+	if _, ok := user.Favourites[newAsset.GetID()]; ok {
+		http.Error(w, "Asset already exists", http.StatusBadRequest)
+		return
 	}
 
 	// Add the new asset with the asset ID as the key to the user's favorites map and save the updated user
@@ -68,8 +75,8 @@ func AddUserFavorite(w http.ResponseWriter, r *http.Request) {
 
 func DeleteUserFavorite(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	userID := vars["id"]
-	assetID := vars["assetID"]
+	userID, _ := strconv.Atoi(vars["id"])
+	assetID, _ := strconv.Atoi(vars["assetID"])
 
 	// Check if the user exists
 	user, ok := data.Users[userID]
@@ -93,8 +100,8 @@ func DeleteUserFavorite(w http.ResponseWriter, r *http.Request) {
 
 func EditUserFavorite(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	userID := vars["id"]
-	assetID := vars["assetID"]
+	userID, _ := strconv.Atoi(vars["id"])
+	assetID, _ := strconv.Atoi(vars["assetID"])
 
 	// Check if the user exists
 	user, ok := data.Users[userID]

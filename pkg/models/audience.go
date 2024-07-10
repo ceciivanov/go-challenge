@@ -2,19 +2,19 @@ package models
 
 // Audience represents an audience asset
 type Audience struct {
-	ID                string `json:"id"`
+	ID                int    `json:"id"`
 	Type              string `json:"type"`
 	Description       string `json:"description"`
-	Age               int    `json:"age"`
+	Age               uint   `json:"age"`
 	AgeGroup          string `json:"ageGroup"`
 	Gender            string `json:"gender"`
 	BirthCountry      string `json:"birthCountry"`
-	HoursSpentOnMedia int    `json:"hoursSpentOnMedia"`
-	NumberOfPurchases int    `json:"numberOfPurchases"`
+	HoursSpentOnMedia uint   `json:"hoursSpentOnMedia"`
+	NumberOfPurchases uint   `json:"numberOfPurchases"`
 }
 
 // Implement the Asset interface for Audience
-func (a Audience) GetID() string {
+func (a Audience) GetID() int {
 	return a.ID
 }
 

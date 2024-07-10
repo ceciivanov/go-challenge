@@ -2,14 +2,14 @@ package models
 
 // Insight represents an insight asset
 type Insight struct {
-	ID          string `json:"id"`
+	ID          int    `json:"id"`
 	Type        string `json:"type"`
 	Description string `json:"description"`
 	Text        string `json:"text"`
 }
 
 // Implement the Asset interface for Insight
-func (i Insight) GetID() string {
+func (i Insight) GetID() int {
 	return i.ID
 }
 

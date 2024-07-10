@@ -1,6 +1,6 @@
 package models
 
 type User struct {
-	ID         string           `json:"id"`
-	Favourites map[string]Asset `json:"favourites"`
+	ID         int           `json:"id"`
+	Favourites map[int]Asset `json:"favourites"`
 }
