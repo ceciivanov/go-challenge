@@ -1,7 +1,7 @@
 package data
 
 import (
-	"github.com/ceci/go-challenge/pkg/models"
+	"github.com/ceciivanov/go-challenge/pkg/models"
 )
 
 var Users map[string]models.User

@@ -1,4 +1,4 @@
-module github.com/ceci/go-challenge
+module github.com/ceciivanov/go-challenge
 
 go 1.22.4
 

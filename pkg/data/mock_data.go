@@ -5,7 +5,7 @@ package data
 import (
 	"fmt"
 
-	"github.com/ceci/go-challenge/pkg/models"
+	"github.com/ceciivanov/go-challenge/pkg/models"
 )
 
 func GenerateMockData() {

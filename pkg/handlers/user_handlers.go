@@ -5,9 +5,9 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/ceci/go-challenge/pkg/data"
-	"github.com/ceci/go-challenge/pkg/models"
-	"github.com/ceci/go-challenge/pkg/utils"
+	"github.com/ceciivanov/go-challenge/pkg/data"
+	"github.com/ceciivanov/go-challenge/pkg/models"
+	"github.com/ceciivanov/go-challenge/pkg/utils"
 	"github.com/gorilla/mux"
 )
 

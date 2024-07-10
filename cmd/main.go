@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/ceci/go-challenge/pkg/data"
-	"github.com/ceci/go-challenge/pkg/handlers"
+	"github.com/ceciivanov/go-challenge/pkg/data"
+	"github.com/ceciivanov/go-challenge/pkg/handlers"
 	"github.com/gorilla/mux"
 )
 
