@@ -49,7 +49,7 @@ func AddUserFavorite(w http.ResponseWriter, r *http.Request) {
 	// Decode the asset data into the correct asset type
 	newAsset, err := utils.DecodeAsset(newAssetData)
 	if err != nil {
-		http.Error(w, "Invalid Asset data", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -127,7 +127,7 @@ func EditUserFavorite(w http.ResponseWriter, r *http.Request) {
 	// Decode the asset data into the correct asset type
 	updatedAsset, err := utils.DecodeAsset(updatedAssetData)
 	if err != nil {
-		http.Error(w, "Invalid asset data", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
