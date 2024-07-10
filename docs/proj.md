@@ -1,6 +1,4 @@
 go-challenge/
-│
-├── cmd/
 │   └── main.go
 │
 ├── pkg/
@@ -23,7 +21,7 @@ go-challenge/
 └── go.mod
 
 
-- cmd//main.go: Main entry point of application.
+- main.go: Main entry point of application.
 
 - pkg/: Contains all your application packages.
     - handlers/: HTTP request handlers. 
