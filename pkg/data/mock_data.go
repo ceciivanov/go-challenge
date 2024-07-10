@@ -4,7 +4,6 @@ package data
 
 import (
 	"fmt"
-	"math/rand"
 
 	"github.com/ceciivanov/go-challenge/pkg/models"
 	"github.com/ceciivanov/go-challenge/pkg/utils"
@@ -40,7 +39,7 @@ func GenerateMockData(numberOfUsers, numberOfAssets int) {
 					Title:       fmt.Sprintf("GWI Chart %d", j),
 					XAxesTitle:  "X-Axis",
 					YAxesTitle:  "Y-Axis",
-					DataPoints:  utils.GenerateRandomPoints(1, 5),
+					DataPoints:  utils.GetRandomPoints(1, 5),
 				}
 			case 1:
 				asset = &models.Insight{
@@ -54,12 +53,12 @@ func GenerateMockData(numberOfUsers, numberOfAssets int) {
 					ID:                assetID,
 					Type:              models.AssetTypeAudience,
 					Description:       "Sample Audience for GWI",
-					Age:               uint(rand.Int()),
+					Age:               utils.GetRandomNumber(100),
 					AgeGroup:          utils.GetRandomAgeGroup(),
 					Gender:            utils.GetRandomGender(),
 					BirthCountry:      utils.GetRandomCountry(),
-					HoursSpentOnMedia: uint(rand.Int()),
-					NumberOfPurchases: uint(rand.Int()),
+					HoursSpentOnMedia: utils.GetRandomNumber(100),
+					NumberOfPurchases: utils.GetRandomNumber(100),
 				}
 			}
 

@@ -42,6 +42,19 @@ var countries = []string{
 	"United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe",
 }
 
+// GetRandomPoints generates a random number of random points
+func GetRandomPoints(minPoints, maxPoints int) []models.Point {
+	numPoints := rand.Intn(maxPoints-minPoints+1) + minPoints
+	points := make([]models.Point, numPoints)
+	for i := 0; i < numPoints; i++ {
+		points[i] = models.Point{
+			X: rand.Float32(), // Adjust range as needed
+			Y: rand.Float32(), // Adjust range as needed
+		}
+	}
+	return points
+}
+
 // GetRandomAgeGroup returns a random age group
 func GetRandomAgeGroup() string {
 	ageGroups := []string{AgeGroupTeen, AgeGroupAdult, AgeGroupSenior}
@@ -54,20 +67,11 @@ func GetRandomGender() string {
 	return genders[rand.Intn(len(genders))]
 }
 
-// GenerateRandomPoints generates a random number of random points
-func GenerateRandomPoints(minPoints, maxPoints int) []models.Point {
-	numPoints := rand.Intn(maxPoints-minPoints+1) + minPoints
-	points := make([]models.Point, numPoints)
-	for i := 0; i < numPoints; i++ {
-		points[i] = models.Point{
-			X: rand.Float32(), // Adjust range as needed
-			Y: rand.Float32(), // Adjust range as needed
-		}
-	}
-	return points
-}
-
 // GetRandomCountry returns a random country from the predefined list
 func GetRandomCountry() string {
 	return countries[rand.Intn(len(countries))]
+}
+
+func GetRandomNumber(max int) uint {
+	return uint(rand.Intn(max))
 }
