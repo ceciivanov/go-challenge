@@ -1,6 +1,6 @@
 {
-  "id": 100001,
-  "type": "insight",
+  "id": 10,
+  "type": "Insight",
   "description": "This insight is an insight",
   "text": "This is an insight"
 }

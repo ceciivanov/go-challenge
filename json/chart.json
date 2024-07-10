@@ -1,6 +1,6 @@
 {
   "id": 2,
-  "type": "chart",
+  "type": "Chart",
   "description": "This chart is updated",
   "title": "Chart Updated",
   "xAxesTitle": "X-Updated",

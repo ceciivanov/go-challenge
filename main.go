@@ -11,8 +11,8 @@ import (
 
 func main() {
 
-	numberOfUsers := 1000
-	numberOfAssets := 100000
+	numberOfUsers := 5
+	numberOfAssets := 10
 	data.GenerateMockData(numberOfUsers, numberOfAssets)
 
 	// Create a new router from the Gorilla Mux package

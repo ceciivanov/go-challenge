@@ -18,19 +18,19 @@ func DecodeAsset(data []byte) (models.Asset, error) {
 	}
 
 	switch base.Type {
-	case models.AssetTypeChart:
+	case string(models.ChartType):
 		var chart models.Chart
 		if err := json.Unmarshal(data, &chart); err != nil {
 			return nil, err
 		}
 		return &chart, nil
-	case models.AssetTypeInsight:
+	case string(models.InsightType):
 		var insight models.Insight
 		if err := json.Unmarshal(data, &insight); err != nil {
 			return nil, err
 		}
 		return &insight, nil
-	case models.AssetTypeAudience:
+	case string(models.AudienceType):
 		var audience models.Audience
 		if err := json.Unmarshal(data, &audience); err != nil {
 			return nil, err

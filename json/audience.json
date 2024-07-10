@@ -1,6 +1,6 @@
 {
-    "id": 1,
-    "type": "audience",
+    "id": 10,
+    "type": "Audience",
     "description": "This audience is a 40 year old",
     "age": 40,
     "gender": "Male",

@@ -8,13 +8,13 @@ type Point struct {
 
 // Chart represents a chart asset
 type Chart struct {
-	ID          int     `json:"id"`
-	Type        string  `json:"type"`
-	Description string  `json:"description"`
-	Title       string  `json:"title"`
-	XAxesTitle  string  `json:"xAxesTitle"`
-	YAxesTitle  string  `json:"yAxesTitle"`
-	DataPoints  []Point `json:"dataPoints"`
+	ID          int       `json:"id"`
+	Type        AssetType `json:"type"`
+	Description string    `json:"description"`
+	Title       string    `json:"title"`
+	XAxesTitle  string    `json:"xAxesTitle"`
+	YAxesTitle  string    `json:"yAxesTitle"`
+	DataPoints  []Point   `json:"dataPoints"`
 }
 
 // Implement the Asset interface for Chart
@@ -22,7 +22,7 @@ func (c Chart) GetID() int {
 	return c.ID
 }
 
-func (c Chart) GetType() string {
+func (c Chart) GetType() AssetType {
 	return c.Type
 }
 
