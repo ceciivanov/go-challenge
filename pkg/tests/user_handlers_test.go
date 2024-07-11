@@ -1,4 +1,4 @@
-package tests
+package handlers
 
 import (
 	"bytes"
@@ -7,17 +7,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ceciivanov/go-challenge/pkg/data"
 	"github.com/ceciivanov/go-challenge/pkg/handlers"
 	"github.com/ceciivanov/go-challenge/pkg/models"
+	"github.com/ceciivanov/go-challenge/pkg/repository"
 	"github.com/gorilla/mux"
 )
 
 func TestGetUserFavorites(t *testing.T) {
 
-	// Create a new DataStore
-	ds := data.NewDataStore()
-	ds.GenerateMockDataStore(5, 5)
+	// Create a new Users Repository
+	repo := repository.NewUsersRepository()
+	repo.GenerateSampleUsers(5, 5)
 
 	// Create a new HTTP request
 	req, err := http.NewRequest("GET", "/users/1/favorites", nil)
@@ -25,7 +25,7 @@ func TestGetUserFavorites(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	handler := handlers.NewHandler(ds)
+	handler := handlers.NewUserHandler(repo)
 
 	// Create a new ResponseRecorder and assign the handler
 	rr := httptest.NewRecorder()
@@ -43,9 +43,9 @@ func TestGetUserFavorites(t *testing.T) {
 
 func TestGetUserFavoritesUserNotFound(t *testing.T) {
 
-	// Create a new DataStore
-	ds := data.NewDataStore()
-	ds.GenerateMockDataStore(5, 5)
+	// Create a new Users Repository
+	repo := repository.NewUsersRepository()
+	repo.GenerateSampleUsers(5, 5)
 
 	// Create a new HTTP request with an invalid user ID
 	req, err := http.NewRequest("GET", "/users/999999/favorites", nil)
@@ -53,7 +53,7 @@ func TestGetUserFavoritesUserNotFound(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	handler := handlers.NewHandler(ds)
+	handler := handlers.NewUserHandler(repo)
 
 	// Create a new ResponseRecorder and assign the handler
 	rr := httptest.NewRecorder()
@@ -77,9 +77,9 @@ func TestGetUserFavoritesUserNotFound(t *testing.T) {
 
 func TestAddUserFavorite(t *testing.T) {
 
-	// Create a new DataStore
-	ds := data.NewDataStore()
-	ds.GenerateMockDataStore(5, 5)
+	// Create a new Users Repository
+	repo := repository.NewUsersRepository()
+	repo.GenerateSampleUsers(5, 5)
 
 	// Prepare JSON payload for the asset you want to add as favorite
 	payload := []byte(`{
@@ -98,7 +98,7 @@ func TestAddUserFavorite(t *testing.T) {
 	// Set the request Content-Type header
 	req.Header.Set("Content-Type", "application/json")
 
-	handler := handlers.NewHandler(ds)
+	handler := handlers.NewUserHandler(repo)
 
 	// Create a new ResponseRecorder and assign the handler
 	rr := httptest.NewRecorder()
@@ -116,10 +116,11 @@ func TestAddUserFavorite(t *testing.T) {
 
 func TestAddUserFavoriteAssetExists(t *testing.T) {
 
-	// Create a new DataStore
-	ds := data.NewDataStore()
-	// init data store with one user and one favorite
-	ds.Users = map[int]models.User{
+	// Create a new Users Repository
+	repo := repository.NewUsersRepository()
+
+	// Initialize the Users Repository with one user and one favorite
+	repo.Users = map[int]models.User{
 		1: {
 			ID: 1,
 			Favourites: map[int]models.Asset{
@@ -150,7 +151,7 @@ func TestAddUserFavoriteAssetExists(t *testing.T) {
 	// Set the request Content-Type header
 	req.Header.Set("Content-Type", "application/json")
 
-	handler := handlers.NewHandler(ds)
+	handler := handlers.NewUserHandler(repo)
 
 	// Create a new ResponseRecorder and assign the handler
 	rr := httptest.NewRecorder()
@@ -167,9 +168,10 @@ func TestAddUserFavoriteAssetExists(t *testing.T) {
 }
 
 func TestDeleteUserFavorite(t *testing.T) {
-	// Create a new DataStore
-	ds := data.NewDataStore()
-	ds.GenerateMockDataStore(5, 5)
+
+	// Create a new Users Repository
+	repo := repository.NewUsersRepository()
+	repo.GenerateSampleUsers(5, 5)
 
 	// Create a new HTTP request
 	req, err := http.NewRequest("DELETE", "/users/1/favorites/1", nil)
@@ -177,7 +179,7 @@ func TestDeleteUserFavorite(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	handler := handlers.NewHandler(ds)
+	handler := handlers.NewUserHandler(repo)
 
 	// Create a new ResponseRecorder and assign the handler
 	rr := httptest.NewRecorder()
@@ -194,16 +196,17 @@ func TestDeleteUserFavorite(t *testing.T) {
 
 	// Verify that the asset was removed from the user's favorites list
 	// Example: Retrieve the updated user from the data store
-	_, ok := ds.Users[1].Favourites[1]
+	_, ok := repo.Users[1].Favourites[1]
 	if ok {
 		t.Errorf("expected asset ID 1 to be removed from user's favorites list, but it was found")
 	}
 }
 
 func TestDeleteUserFavoriteAssetNotFound(t *testing.T) {
-	// Create a new DataStore
-	ds := data.NewDataStore()
-	ds.GenerateMockDataStore(5, 5)
+
+	// Create a new Users Repository
+	repo := repository.NewUsersRepository()
+	repo.GenerateSampleUsers(5, 5)
 
 	// Create a new HTTP request
 	req, err := http.NewRequest("DELETE", "/users/1/favorites/999999", nil)
@@ -211,7 +214,7 @@ func TestDeleteUserFavoriteAssetNotFound(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	handler := handlers.NewHandler(ds)
+	handler := handlers.NewUserHandler(repo)
 
 	// Create a new ResponseRecorder and assign the handler
 	rr := httptest.NewRecorder()
@@ -229,9 +232,9 @@ func TestDeleteUserFavoriteAssetNotFound(t *testing.T) {
 
 func TestEditUserFavorite(t *testing.T) {
 
-	// Create a new DataStore
-	ds := data.NewDataStore()
-	ds.GenerateMockDataStore(5, 5)
+	// Create a new Users Repository
+	repo := repository.NewUsersRepository()
+	repo.GenerateSampleUsers(5, 5)
 
 	// Prepare JSON payload for the asset you want to update
 	payload := []byte(`{
@@ -250,7 +253,7 @@ func TestEditUserFavorite(t *testing.T) {
 	// Set the request Content-Type header
 	req.Header.Set("Content-Type", "application/json")
 
-	handler := handlers.NewHandler(ds)
+	handler := handlers.NewUserHandler(repo)
 
 	// Create a new ResponseRecorder and assign the handler
 	rr := httptest.NewRecorder()
@@ -268,10 +271,11 @@ func TestEditUserFavorite(t *testing.T) {
 
 func TestEditUserFavoriteNoIDMatch(t *testing.T) {
 
-	// Create a new DataStore
-	ds := data.NewDataStore()
-	// init data store with one user and one favorite
-	ds.Users = map[int]models.User{
+	// Create a new Users Repository
+	repo := repository.NewUsersRepository()
+
+	// Initialize the Users Repository with one user and one favorite
+	repo.Users = map[int]models.User{
 		1: {
 			ID: 1,
 			Favourites: map[int]models.Asset{
@@ -302,7 +306,7 @@ func TestEditUserFavoriteNoIDMatch(t *testing.T) {
 	// Set the request Content-Type header
 	req.Header.Set("Content-Type", "application/json")
 
-	handler := handlers.NewHandler(ds)
+	handler := handlers.NewUserHandler(repo)
 
 	// Create a new ResponseRecorder and assign the handler
 	rr := httptest.NewRecorder()
@@ -320,11 +324,11 @@ func TestEditUserFavoriteNoIDMatch(t *testing.T) {
 
 func TestEditUserFavoriteNoTypeMatch(t *testing.T) {
 
-	// Create a new DataStore
-	ds := data.NewDataStore()
+	// Create a new Users Repository
+	repo := repository.NewUsersRepository()
 
-	// init data store with one user and one favorite
-	ds.Users = map[int]models.User{
+	// Initialize the Users Repository with one user and one favorite
+	repo.Users = map[int]models.User{
 		1: {
 			ID: 1,
 			Favourites: map[int]models.Asset{
@@ -367,7 +371,7 @@ func TestEditUserFavoriteNoTypeMatch(t *testing.T) {
 	// Set the request Content-Type header
 	req.Header.Set("Content-Type", "application/json")
 
-	handler := handlers.NewHandler(ds)
+	handler := handlers.NewUserHandler(repo)
 
 	// Create a new ResponseRecorder and assign the handler
 	rr := httptest.NewRecorder()

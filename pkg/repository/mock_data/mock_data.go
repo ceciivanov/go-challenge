@@ -1,34 +1,23 @@
-// data/mock_data.go
-
-package data
+package mock_data
 
 import (
 	"fmt"
 
 	"github.com/ceciivanov/go-challenge/pkg/models"
-	"github.com/ceciivanov/go-challenge/pkg/utils"
 )
 
-// // Define a global variable map to store users
-// var Users map[int]models.User
-
-// // Initialize the Users map when the package is loaded
-// func init() {
-// 	Users = make(map[int]models.User)
-// }
-
 // GenerateMockData generates mock data for users and assets and returns a map of users
-func GenerateMockData(numberOfUsers, numberOfAssets int) map[int]models.User {
+func GenerateMockData(NumberOfUsers, NumberOfAssets int) map[int]models.User {
 	Users := make(map[int]models.User)
 
-	for i := 1; i <= numberOfUsers; i++ {
+	for i := 1; i <= NumberOfUsers; i++ {
 		userID := i
 		user := models.User{
 			ID:         userID,
 			Favourites: make(map[int]models.Asset),
 		}
 
-		for j := 1; j <= numberOfAssets; j++ {
+		for j := 1; j <= NumberOfAssets; j++ {
 			assetID := j
 			assetType := j % 3
 
@@ -42,7 +31,7 @@ func GenerateMockData(numberOfUsers, numberOfAssets int) map[int]models.User {
 					Title:       fmt.Sprintf("GWI Chart %d", j),
 					XAxesTitle:  "X-Axis",
 					YAxesTitle:  "Y-Axis",
-					DataPoints:  utils.GetRandomPoints(1, 5),
+					DataPoints:  GetRandomPoints(1, 5),
 				}
 			case 1:
 				asset = &models.Insight{
@@ -56,12 +45,12 @@ func GenerateMockData(numberOfUsers, numberOfAssets int) map[int]models.User {
 					ID:                assetID,
 					Type:              models.AudienceType,
 					Description:       "Sample Audience for GWI",
-					Age:               utils.GetRandomNumber(100),
-					AgeGroup:          utils.GetRandomAgeGroup(),
-					Gender:            utils.GetRandomGender(),
-					BirthCountry:      utils.GetRandomCountry(),
-					HoursSpentOnMedia: utils.GetRandomNumber(100),
-					NumberOfPurchases: utils.GetRandomNumber(100),
+					Age:               GetRandomNumber(100),
+					AgeGroup:          GetRandomAgeGroup(),
+					Gender:            GetRandomGender(),
+					BirthCountry:      GetRandomCountry(),
+					HoursSpentOnMedia: GetRandomNumber(100),
+					NumberOfPurchases: GetRandomNumber(100),
 				}
 			}
 

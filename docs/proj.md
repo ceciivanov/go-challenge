@@ -15,8 +15,15 @@ go-challenge/
 │   └── utils/
 │       └── decoder.go
 │   |
-|   |__ data/
-|       |__ users_data.go
+|   |__ repository/
+|       |__ mock_data/
+|       |   |__ mock_data.go
+|       |   |__ random.go
+|       |
+|       |__ users_repository.go
+|   |__
+├──     tests/
+│       ├── user_handlers_test.go
 │
 └── go.mod
 
@@ -27,5 +34,5 @@ go-challenge/
     - handlers/: HTTP request handlers. 
     - models/: Structs and interfaces representing models.
     - utils/: Utility functions.
-    - data/: Application in-memory data.
+    - repository/: Application in-memory data.
     - tests/: Test files for the application.

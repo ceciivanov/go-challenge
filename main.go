@@ -4,22 +4,22 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/ceciivanov/go-challenge/pkg/data"
 	"github.com/ceciivanov/go-challenge/pkg/handlers"
+	"github.com/ceciivanov/go-challenge/pkg/repository"
 	"github.com/gorilla/mux"
 )
 
 func main() {
 
-	numberOfUsers := 1
-	numberOfAssets := 2
+	NumberOfUsers := 1
+	NumberOfAssets := 2
 
 	// Create a new DataStore and generate mock data
-	ds := data.NewDataStore()
-	ds.GenerateMockDataStore(numberOfUsers, numberOfAssets)
+	repo := repository.NewUsersRepository()
+	repo.GenerateSampleUsers(NumberOfUsers, NumberOfAssets)
 
 	// Create a new Handler instance with the DataStore
-	handler := handlers.NewHandler(ds)
+	handler := handlers.NewUserHandler(repo)
 
 	// Create a new router from the Gorilla Mux package
 	r := mux.NewRouter()
