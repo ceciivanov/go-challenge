@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/ceciivanov/go-challenge/pkg/models"
 	"github.com/ceciivanov/go-challenge/pkg/repository"
 	"github.com/ceciivanov/go-challenge/pkg/utils"
 	"github.com/gorilla/mux"
@@ -63,11 +62,6 @@ func (h *UserHandler) AddUserFavorite(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
-	}
-
-	// Check if the user has a favourites map and create one if not
-	if user.Favourites == nil {
-		user.Favourites = make(map[int]models.Asset)
 	}
 
 	// Check if newAsset's id already exists in the map
@@ -143,15 +137,15 @@ func (h *UserHandler) EditUserFavorite(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Validate that assetID in the request body matches the assetID in the URL
+	// Validate that the asset ID in the request body matches the asset ID in the URL
 	if updatedAsset.GetID() != assetID {
-		http.Error(w, "Asset ID in the request body does not match the URL", http.StatusBadRequest)
+		http.Error(w, "Asset ID in the request body (ID: "+strconv.Itoa(updatedAsset.GetID())+") does not match the asset ID in the URL (ID: "+strconv.Itoa(assetID)+")", http.StatusBadRequest)
 		return
 	}
 
 	// Validate that the asset type in the request body matches the existing asset type
 	if updatedAsset.GetType() != asset.GetType() {
-		http.Error(w, "Asset type in the request body does not match the existing asset type", http.StatusBadRequest)
+		http.Error(w, "Asset type in the request body ("+string(updatedAsset.GetType())+") does not match the existing asset type ("+string(asset.GetType())+")", http.StatusBadRequest)
 		return
 	}
 

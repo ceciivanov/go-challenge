@@ -11,35 +11,26 @@ import (
 
 func main() {
 
-	NumberOfUsers := 1
-	NumberOfAssets := 2
+	// Create and initialize a new UsersRepository instance
+	NumberOfUsers := 10
+	NumberOfAssets := 50
 
-	// Create a new DataStore and generate mock data
 	repo := repository.NewUsersRepository()
 	repo.GenerateSampleUsers(NumberOfUsers, NumberOfAssets)
 
-	// Create a new Handler instance with the DataStore
+	// Create a new Handler instance and pass the repository to it
 	handler := handlers.NewUserHandler(repo)
 
 	// Create a new router from the Gorilla Mux package
 	r := mux.NewRouter()
 
 	// Define the routes using handler methods
-
-	// GET /users/{id}/favorites - Get a user's favorite assets
 	r.HandleFunc("/users/{id}/favorites", handler.GetUserFavorites).Methods("GET")
-
-	// POST /users/{id}/favorites - Add a new asset to a user's favorites
 	r.HandleFunc("/users/{id}/favorites", handler.AddUserFavorite).Methods("POST")
-
-	// DELETE /users/{id}/favorites/{assetID} - Remove an asset from a user's favorites
 	r.HandleFunc("/users/{id}/favorites/{assetID}", handler.DeleteUserFavorite).Methods("DELETE")
-
-	// PUT /users/{id}/favorites/{assetID} - Edit an asset from a user's favorites
 	r.HandleFunc("/users/{id}/favorites/{assetID}", handler.EditUserFavorite).Methods("PUT")
 
-	fmt.Println("Server is running on port 8080...")
-
 	// Start the server
+	fmt.Println("Server is running on port 8080...")
 	http.ListenAndServe(":8080", r)
 }

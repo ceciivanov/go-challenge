@@ -4,6 +4,7 @@ go-challenge/
 ├── pkg/
 │   ├── handlers/
 │   │   └── user_handlers.go
+|   |   └── user_handlers_test.go
 │   │
 │   ├── models/
 │   │   ├── asset.go
@@ -21,9 +22,6 @@ go-challenge/
 |       |   |__ random.go
 |       |
 |       |__ users_repository.go
-|   |__
-├──     tests/
-│       ├── user_handlers_test.go
 │
 └── go.mod
 
@@ -35,4 +33,3 @@ go-challenge/
     - models/: Structs and interfaces representing models.
     - utils/: Utility functions.
     - repository/: Application in-memory data.
-    - tests/: Test files for the application.

@@ -2,8 +2,8 @@ package models
 
 // Point represents a data point in the chart
 type Point struct {
-	X float32 `json:"x"`
-	Y float32 `json:"y"`
+	X float32 `json:"X"`
+	Y float32 `json:"Y"`
 }
 
 // Chart represents a chart asset
