@@ -8,8 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ceciivanov/go-challenge/pkg/models"
-	"github.com/ceciivanov/go-challenge/pkg/repository"
+	"github.com/ceciivanov/go-challenge/internal/models"
+	"github.com/ceciivanov/go-challenge/internal/repository"
+	"github.com/ceciivanov/go-challenge/internal/service"
 	"github.com/gorilla/mux"
 )
 
@@ -144,16 +145,18 @@ func runTestCase(t *testing.T, tc testCase) {
 		t.Fatal(err)
 	}
 
-	// Create a new ResponseRecorder and assign the handler
-	rr := httptest.NewRecorder()
-	handler := NewUserHandler(repo)
+	// Create a new UserService Instance
+	userService := service.NewUserService(repo)
 
-	// Create a new router and assign the handler
+	// Create a new UserHandler instance
+	userHandler := NewUserHandler(userService)
+
+	// Create a new ResponseRecorder
+	rr := httptest.NewRecorder()
+
+	// Create a new router and register routes
 	r := mux.NewRouter()
-	r.HandleFunc("/users/{id}/favorites", handler.GetUserFavorites).Methods("GET")
-	r.HandleFunc("/users/{id}/favorites", handler.AddUserFavorite).Methods("POST")
-	r.HandleFunc("/users/{id}/favorites/{assetID}", handler.DeleteUserFavorite).Methods("DELETE")
-	r.HandleFunc("/users/{id}/favorites/{assetID}", handler.EditUserFavorite).Methods("PUT")
+	userHandler.RegisterRoutes(r)
 
 	// Serve the HTTP request
 	r.ServeHTTP(rr, req)
@@ -183,7 +186,7 @@ func TestHandlers(t *testing.T) {
 			method:         "GET",
 			url:            "/users/999999/favorites",
 			expectedStatus: http.StatusNotFound,
-			expectedBody:   "User not found",
+			expectedBody:   "user not found",
 		},
 	}
 
@@ -257,7 +260,7 @@ func TestHandlers(t *testing.T) {
 				Text:        "Testing Insight",
 			},
 			expectedStatus: http.StatusBadRequest,
-			expectedBody:   "Asset already exists",
+			expectedBody:   "asset already exists",
 		},
 		{
 			name:   "AddUserFavoriteInvalidAssetType",
@@ -283,7 +286,23 @@ func TestHandlers(t *testing.T) {
 				Text:        "Testing Insight",
 			},
 			expectedStatus: http.StatusNotFound,
-			expectedBody:   "User not found",
+			expectedBody:   "user not found",
+		},
+		{
+			name:           "AddUserFavoriteInvalidPayload",
+			method:         "POST",
+			url:            "/users/1/favorites",
+			payload:        "invalid payload", // Invalid payload
+			expectedStatus: http.StatusBadRequest,
+			// Skip checking the response body as it is not predictable
+		},
+		{
+			name:           "AddUserFavoriteNoPayload",
+			method:         "POST",
+			url:            "/users/1/favorites",
+			payload:        nil, // No payload
+			expectedStatus: http.StatusBadRequest,
+			expectedBody:   "no request body",
 		},
 	}
 
@@ -307,14 +326,14 @@ func TestHandlers(t *testing.T) {
 			method:         "DELETE",
 			url:            "/users/2/favorites/999999",
 			expectedStatus: http.StatusNotFound,
-			expectedBody:   "Asset not found",
+			expectedBody:   "asset not found",
 		},
 		{
 			name:           "DeleteUserFavoriteUserNotFound",
 			method:         "DELETE",
 			url:            "/users/999999/favorites/1",
 			expectedStatus: http.StatusNotFound,
-			expectedBody:   "User not found",
+			expectedBody:   "user not found",
 		},
 	}
 
@@ -388,7 +407,7 @@ func TestHandlers(t *testing.T) {
 				Text:        "Updated Insight Text",
 			},
 			expectedStatus: http.StatusBadRequest,
-			expectedBody:   "Asset ID in the request body (ID: 2) does not match the asset ID in the URL (ID: 1)",
+			expectedBody:   "edited asset ID does not match existing asset ID",
 		},
 		{
 			name:   "EditUserFavoriteNoTypeMatch",
@@ -407,7 +426,7 @@ func TestHandlers(t *testing.T) {
 				},
 			},
 			expectedStatus: http.StatusBadRequest,
-			expectedBody:   "Asset type in the request body (Chart) does not match the existing asset type (Audience)",
+			expectedBody:   "edited asset type does not match existing asset type",
 		},
 		{
 			name:   "EditUserFavoriteUserNotFound",
@@ -420,7 +439,7 @@ func TestHandlers(t *testing.T) {
 				Text:        "Updated Insight Text",
 			},
 			expectedStatus: http.StatusNotFound,
-			expectedBody:   "User not found",
+			expectedBody:   "user not found",
 		},
 		{
 			name:   "EditUserFavoriteAssetNotFound",
@@ -433,7 +452,7 @@ func TestHandlers(t *testing.T) {
 				Text:        "Updated Insight Text",
 			},
 			expectedStatus: http.StatusNotFound,
-			expectedBody:   "Asset not found",
+			expectedBody:   "asset not found",
 		},
 		{
 			name:   "EditUserFavoriteInvalidAssetType",

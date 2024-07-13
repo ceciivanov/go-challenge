@@ -1,10 +1,10 @@
 {
-  "id": 1,
+  "id": 3,
   "type": "Chart",
-  "description": "This chart is updated",
-  "title": "Chart Updated",
-  "xAxesTitle": "X-Updated",
-  "yAxesTitle": "Y-Updated",
+  "description": "This is a chart",
+  "title": "Chart",
+  "xAxesTitle": "X-Axis",
+  "yAxesTitle": "Y-Axis",
   "dataPoints": [
     {
       "X": 10,

@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/ceciivanov/go-challenge/pkg/models"
-	"github.com/ceciivanov/go-challenge/pkg/repository/mock_data"
+	"github.com/ceciivanov/go-challenge/internal/models"
+	"github.com/ceciivanov/go-challenge/internal/repository/mock_data"
 )
 
 // UsersRepository is a struct that holds the users data in memory

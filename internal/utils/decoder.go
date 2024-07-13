@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/ceciivanov/go-challenge/pkg/models"
+	"github.com/ceciivanov/go-challenge/internal/models"
 )
 
 // DecodeAsset decodes JSON into the correct asset type

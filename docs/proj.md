@@ -1,7 +1,7 @@
 go-challenge/
 │   └── main.go
 │
-├── pkg/
+├── internal/
 │   ├── handlers/
 │   │   └── user_handlers.go
 |   |   └── user_handlers_test.go
@@ -28,7 +28,7 @@ go-challenge/
 
 - main.go: Main entry point of application.
 
-- pkg/: Contains all your application packages.
+- internal/: Contains all your application packages.
     - handlers/: HTTP request handlers. 
     - models/: Structs and interfaces representing models.
     - utils/: Utility functions.
