@@ -24,6 +24,7 @@ func NewUserHandler(userService *service.UserService) *UserHandler {
 	}
 }
 
+// RegisterRoutes registers the routes (endpoints) for the user handler
 func (handler *UserHandler) RegisterRoutes(r *mux.Router) {
 	r.HandleFunc("/users/{id}/favorites", handler.GetUserFavorites).Methods(http.MethodGet)
 	r.HandleFunc("/users/{id}/favorites", handler.AddUserFavorite).Methods(http.MethodPost)
@@ -31,6 +32,7 @@ func (handler *UserHandler) RegisterRoutes(r *mux.Router) {
 	r.HandleFunc("/users/{id}/favorites/{assetID}", handler.EditUserFavorite).Methods(http.MethodPut)
 }
 
+// GetUserFavorites returns a map of user's favorite assets
 func (h *UserHandler) GetUserFavorites(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID, _ := strconv.Atoi(vars["id"])
@@ -45,6 +47,7 @@ func (h *UserHandler) GetUserFavorites(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(favorites)
 }
 
+// AddUserFavorite adds an asset to the user's favorites
 func (h *UserHandler) AddUserFavorite(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID, _ := strconv.Atoi(vars["id"])
@@ -85,6 +88,7 @@ func (h *UserHandler) AddUserFavorite(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(newAsset)
 }
 
+// DeleteUserFavorite deletes an asset from the user's favorites
 func (h *UserHandler) DeleteUserFavorite(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID, _ := strconv.Atoi(vars["id"])
@@ -108,6 +112,7 @@ func (h *UserHandler) DeleteUserFavorite(w http.ResponseWriter, r *http.Request)
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// EditUserFavorite edits an asset in the user's favorites
 func (h *UserHandler) EditUserFavorite(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID, _ := strconv.Atoi(vars["id"])

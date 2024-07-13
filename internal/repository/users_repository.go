@@ -17,6 +17,7 @@ func NewUsersRepository() *UsersRepository {
 	}
 }
 
+// GenerateSampleUsers generates sample users with sample assets
 func (repo *UsersRepository) GenerateSampleUsers(NumberOfUsers, NumberOfAssets int) {
 	repo.Users = mock_data.GenerateMockData(NumberOfUsers, NumberOfAssets)
 }

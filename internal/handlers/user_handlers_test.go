@@ -14,6 +14,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// testCase struct defines a test case for the handlers
 type testCase struct {
 	name           string
 	method         string
@@ -23,6 +24,7 @@ type testCase struct {
 	expectedBody   string
 }
 
+// runTestCase runs a test case for the handlers
 func runTestCase(t *testing.T, tc testCase) {
 	// Initialize the repository with 3 users and 3 favorites each
 	repo := repository.NewUsersRepository()

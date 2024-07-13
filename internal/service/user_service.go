@@ -20,6 +20,7 @@ func NewUserService(repo *repository.UsersRepository) *UserService {
 	}
 }
 
+// GetUserFavorites returns a map of user's favorite assets
 func (s *UserService) GetUserFavorites(userID int) (map[int]models.Asset, error) {
 	user, ok := s.UsersRepository.Users[userID]
 	if !ok {
@@ -28,6 +29,7 @@ func (s *UserService) GetUserFavorites(userID int) (map[int]models.Asset, error)
 	return user.Favourites, nil
 }
 
+// AddUserFavorite adds an asset to the user's favorites
 func (s *UserService) AddUserFavorite(userID int, asset models.Asset) error {
 	user, ok := s.UsersRepository.Users[userID]
 	if !ok {
@@ -43,6 +45,7 @@ func (s *UserService) AddUserFavorite(userID int, asset models.Asset) error {
 	return nil
 }
 
+// DeleteUserFavorite deletes an asset from the user's favorites
 func (s *UserService) DeleteUserFavorite(userID, assetID int) error {
 	user, ok := s.UsersRepository.Users[userID]
 	if !ok {
@@ -58,6 +61,7 @@ func (s *UserService) DeleteUserFavorite(userID, assetID int) error {
 	return nil
 }
 
+// EditUserFavorite edits an asset in the user's favorites
 func (s *UserService) EditUserFavorite(userID int, assetID int, asset models.Asset) error {
 	user, ok := s.UsersRepository.Users[userID]
 	if !ok {
