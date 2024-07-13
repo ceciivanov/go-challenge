@@ -13,7 +13,6 @@ import (
 
 // Handler struct
 type UserHandler struct {
-	// UsersRepository *repository.UsersRepository
 	UserService *service.UserService
 }
 
