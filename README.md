@@ -61,13 +61,14 @@ To run the application locally, follow these steps:
 1. Clone the repository:
 
 ```bash
-git clone 
+git clone https://github.com/ceciivanov/platform-go-challenge.git
 ``` 
 
 2. Change into the project directory:
 
 ```bash
 cd globalwebindex-engineering-challenge
+git checkout implementation
 ```
 
 3. Build the application:
@@ -84,6 +85,36 @@ go build -o app cmd/app/main.go
 ```
 
 The application will start on port `8080` by default. You can access the API at `http://localhost:8080`.
+
+5. To stop the application, press `Ctrl + C` in the terminal where the app is running.
+
+
+### Using Docker
+
+To run the application using Docker, follow these steps:
+
+1. Build the Docker image:
+
+```bash
+docker build -t go-platform-challenge .
+```
+
+2. Run the Docker container:
+
+```bash
+docker run -p 8080:8080 go-platform-challenge
+```
+
+The application will start inside a Docker container and be accessible at `http://localhost:8080`.
+
+3. To stop the container, use the following command:
+
+```bash
+docker stop <container_id>
+```
+
+Replace `<container_id>` with the ID of the running container. You can find the container ID by running `docker ps`.
+
 
 
 ## Usage
