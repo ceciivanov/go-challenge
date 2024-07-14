@@ -3,6 +3,8 @@ name: go-test
 on:
   pull_request:
     branches: [ 'main']
+  workflow_dispatch:
+    branches: [ '**' ]
 
 jobs:
   full_ci:
