@@ -67,7 +67,7 @@ git clone https://github.com/ceciivanov/platform-go-challenge.git
 2. Change into the project directory:
 
 ```bash
-cd globalwebindex-engineering-challenge
+cd platform-go-challenge
 git checkout implementation
 ```
 
@@ -96,13 +96,13 @@ To run the application using Docker, follow these steps:
 1. Build the Docker image:
 
 ```bash
-docker build -t go-platform-challenge .
+docker build -t platform-go-challenge .
 ```
 
 2. Run the Docker container:
 
 ```bash
-docker run -p 8080:8080 go-platform-challenge
+docker run -p 8080:8080 platform-go-challenge
 ```
 
 The application will start inside a Docker container and be accessible at `http://localhost:8080`.
@@ -134,6 +134,90 @@ The API provides the following endpoints:
 
 The following examples demonstrate how to interact with the API using `curl` commands.
 
+```bash
+# GET existing user favorites
+curl -X GET http://localhost:8080/users/1/favorites
+
+# GET user favorites which do not exist
+curl -X GET http://localhost:8080/users/999999/favorites
+
+# DELETE existing user favorite
+curl -X DELETE http://localhost:8080/users/1/favorites/1
+
+# DELETE user favorite which does not exist
+curl -X DELETE http://localhost:8080/users/1/favorites/999999
+
+# ADD valid user favorite
+curl -X POST http://localhost:8080/users/1/favorites \
+     -H "Content-Type: application/json" \
+     -d '{
+          "id": 100,
+          "type": "Audience",
+          "description": "This audience is a 40 year old",
+          "age": 40,
+          "ageGroup": "25-45",
+          "gender": "Male",
+          "birthCountry": "USA",
+          "hoursSpentOnMedia": 4,
+          "numberOfPurchases": 10
+         }'
+
+# ADD user favorite which already exists
+curl -X POST http://localhost:8080/users/1/favorites \
+     -H "Content-Type: application/json" \
+     -d '{
+          "id": 2,
+          "type": "Insight",
+          "description": "Sample Insight for testing",
+          "text": "Testing Insight"
+         }'
+
+# ADD user favorite with invalid type
+curl -X POST http://localhost:8080/users/1/favorites \
+     -H "Content-Type: application/json" \
+     -d '{
+          "id": 200,
+          "type": "INVALIDTYPE",
+          "description": "Sample Insight for testing",
+          "text": "Testing Insight"
+         }'
+
+# EDIT the previously added user favorite
+curl -X PUT http://localhost:8080/users/1/favorites/100 \
+     -H "Content-Type: application/json" \
+     -d '{
+          "id": 100,
+          "type": "Audience",
+          "description": "Updated Audience",
+          "age": 18,
+          "ageGroup": "18-25",
+          "gender": "Female",
+          "birthCountry": "Greece",
+          "hoursSpentOnMedia": 15,
+          "numberOfPurchases": 25
+         }'
+
+# EDIT user favorite with mismatched id (assetID in URL and id in body)
+curl -X PUT http://localhost:8080/users/1/favorites/2 \
+     -H "Content-Type: application/json" \
+     -d '{
+          "id": 1,
+          "type": "Insight",
+          "description": "Sample Insight for testing",
+          "text": "Testing Insight"
+         }'
+
+# EDIT user favorite with mismatched type
+curl -X PUT http://localhost:8080/users/1/favorites/100 \
+     -H "Content-Type: application/json" \
+     -d '{
+          "id": 100,
+          "type": "Insight",
+          "description": "Sample Insight for testing",
+          "text": "Testing Insight"
+         }'
+```
+
 
 ## Testing
 
@@ -142,7 +226,11 @@ The project includes unit tests for the service and repository layers. The tests
 To run the tests, execute the following command:
 
 ```bash
-go test ./... -cover
+go test -v ./... -coverprofile=coverage.out
 ```
 
+To view the test coverage report in html format on your browser, install the `go tool cover` package and run the following command:
 
+```bash
+go tool cover -html=coverage.out
+```

@@ -12,8 +12,8 @@ import (
 
 func main() {
 
-	NumberOfUsers := 10
-	NumberOfAssets := 50
+	NumberOfUsers := 2
+	NumberOfAssets := 2
 
 	// Create and initialize a new UsersRepository instance
 	repo := repository.NewUsersRepository()
