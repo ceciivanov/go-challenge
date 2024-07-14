@@ -198,7 +198,7 @@ curl -X PUT http://localhost:8080/users/1/favorites/100 \
          }'
 
 # EDIT user favorite with mismatched id (assetID in URL and id in body)
-curl -X PUT http://localhost:8080/users/1/favorites/2 \
+curl -X PUT http://localhost:8080/users/2/favorites/2 \
      -H "Content-Type: application/json" \
      -d '{
           "id": 1,
