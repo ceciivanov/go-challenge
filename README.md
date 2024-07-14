@@ -36,7 +36,7 @@ The project is organized into the following directories:
 
 - `cmd`: Contains the main application entry point.
 - `internal/models`: Contains the data models used in the application. 
-- `internal/repository`: Handles in-memory data storage and retrieval.
+- `internal/repository`: Handles data storage and retrieval operations. Implements an in-memory data store and any future data storage mechanisms.
 - `internal/handlers`: Implements HTTP request handlers for the API endpoints.
 - `internal/service`: Implements business logic and interacts with repositories.
 - `internal/utils`: Contains utility functions, like decoding JSON data.

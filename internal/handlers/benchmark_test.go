@@ -25,7 +25,7 @@ const (
 
 func BenchmarkGetUserFavorites(b *testing.B) {
 	// Initialize user repository with sample data
-	repo := repository.NewUsersRepository()
+	repo := repository.NewInMemoryUserRepository()
 	repo.GenerateSampleUsers(numUsers, numFavorites)
 
 	// Initialize user service and handler
@@ -65,7 +65,7 @@ func BenchmarkGetUserFavorites(b *testing.B) {
 
 func BenchmarkAddUserFavorite(b *testing.B) {
 	// Initialize user repository with sample data
-	repo := repository.NewUsersRepository()
+	repo := repository.NewInMemoryUserRepository()
 	repo.GenerateSampleUsers(numUsers, numFavorites)
 
 	// Initialize user service and handler
@@ -119,7 +119,7 @@ func BenchmarkAddUserFavorite(b *testing.B) {
 func BenchmarkDeleteUserFavorite(b *testing.B) {
 
 	// Initialize user repository with sample data
-	repo := repository.NewUsersRepository()
+	repo := repository.NewInMemoryUserRepository()
 	repo.GenerateSampleUsers(numUsers, numFavorites)
 
 	// Initialize user service and handler
@@ -162,7 +162,7 @@ func BenchmarkDeleteUserFavorite(b *testing.B) {
 
 func BenchmarkEditUserFavorite(b *testing.B) {
 	// Initialize a new repository for each iteration
-	repo := repository.NewUsersRepository()
+	repo := repository.NewInMemoryUserRepository()
 	repo.GenerateSampleUsers(numUsers, numFavorites)
 
 	// Create a new router and assign the handler

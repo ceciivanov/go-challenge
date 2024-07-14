@@ -17,7 +17,7 @@ func main() {
 	NumberOfAssets := 3
 
 	// Create and initialize a new UsersRepository instance
-	repo := repository.NewUsersRepository()
+	repo := repository.NewInMemoryUserRepository()
 	repo.GenerateSampleUsers(NumberOfUsers, NumberOfAssets)
 
 	// Create UserService and Handler for it

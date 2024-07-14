@@ -77,9 +77,6 @@ func (h *UserHandler) AddUserFavorite(w http.ResponseWriter, r *http.Request) {
 		case "asset already exists":
 			http.Error(w, "asset already exists", http.StatusBadRequest)
 			return
-		default:
-			http.Error(w, "unknown error", http.StatusInternalServerError)
-			return
 		}
 	}
 
@@ -101,9 +98,6 @@ func (h *UserHandler) DeleteUserFavorite(w http.ResponseWriter, r *http.Request)
 			return
 		case "asset not found":
 			http.Error(w, "asset not found", http.StatusNotFound)
-			return
-		default:
-			http.Error(w, "unknown error", http.StatusInternalServerError)
 			return
 		}
 	}
@@ -143,9 +137,6 @@ func (h *UserHandler) EditUserFavorite(w http.ResponseWriter, r *http.Request) {
 			return
 		case "edited asset type does not match existing asset type":
 			http.Error(w, "edited asset type does not match existing asset type", http.StatusBadRequest)
-			return
-		default:
-			http.Error(w, "unknown error", http.StatusInternalServerError)
 			return
 		}
 	}

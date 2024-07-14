@@ -30,7 +30,7 @@ type TestCase struct {
 
 // setup initializes and returns the UserService instance with sample data of 3 users and 3 assets each
 func setup() *service.UserService {
-	repo := repository.NewUsersRepository()
+	repo := repository.NewInMemoryUserRepository()
 	repo.Users = map[int]models.User{
 		1: {
 			ID: 1,
