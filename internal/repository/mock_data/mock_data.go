@@ -9,9 +9,11 @@ import (
 
 // Age groups
 const (
-	AgeGroupTeen   string = "0-17"
-	AgeGroupAdult  string = "18-64"
-	AgeGroupSenior string = "65+"
+	AgeGroupTeen       string = "0-17"
+	AgeGroupYoungAdult string = "18-25"
+	AgeGroupAdult      string = "26-40"
+	AgeGroupMiddleAged string = "41-65"
+	AgeGroupSenior     string = "66+"
 )
 
 // Genders

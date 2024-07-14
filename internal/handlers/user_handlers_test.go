@@ -1,4 +1,4 @@
-package handlers
+package handlers_test
 
 import (
 	"bytes"
@@ -8,14 +8,16 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/ceciivanov/go-challenge/internal/handlers"
 	"github.com/ceciivanov/go-challenge/internal/models"
 	"github.com/ceciivanov/go-challenge/internal/repository"
 	"github.com/ceciivanov/go-challenge/internal/service"
+
 	"github.com/gorilla/mux"
 )
 
 // testCase struct defines a test case for the handlers
-type testCase struct {
+type TestCase struct {
 	name           string
 	method         string
 	url            string
@@ -24,9 +26,8 @@ type testCase struct {
 	expectedBody   string
 }
 
-// runTestCase runs a test case for the handlers
-func runTestCase(t *testing.T, tc testCase) {
-	// Initialize the repository with 3 users and 3 favorites each
+// setup initializes and returns the UserService instance
+func setup() *service.UserService {
 	repo := repository.NewUsersRepository()
 	repo.Users = map[int]models.User{
 		1: {
@@ -133,6 +134,13 @@ func runTestCase(t *testing.T, tc testCase) {
 		},
 	}
 
+	// Create a new UserService Instance and Handler for it
+	userService := service.NewUserService(repo)
+	return userService
+}
+
+// RunTestCase runs a test case for a given router
+func RunTestCase(t *testing.T, r *mux.Router, tc TestCase) {
 	// Create a new HTTP request
 	var req *http.Request
 	var err error
@@ -147,18 +155,8 @@ func runTestCase(t *testing.T, tc testCase) {
 		t.Fatal(err)
 	}
 
-	// Create a new UserService Instance
-	userService := service.NewUserService(repo)
-
-	// Create a new UserHandler instance
-	userHandler := NewUserHandler(userService)
-
 	// Create a new ResponseRecorder
 	rr := httptest.NewRecorder()
-
-	// Create a new router and register routes
-	r := mux.NewRouter()
-	userHandler.RegisterRoutes(r)
 
 	// Serve the HTTP request
 	r.ServeHTTP(rr, req)
@@ -176,7 +174,7 @@ func runTestCase(t *testing.T, tc testCase) {
 
 // TestHandlers tests the GetUserFavorites, AddUserFavorite, DeleteUserFavorite, and EditUserFavorite handlers
 func TestHandlers(t *testing.T) {
-	getUserFavoritesTests := []testCase{
+	getUserFavoritesTests := []TestCase{
 		{
 			name:           "ValidUserFavorites",
 			method:         "GET",
@@ -195,12 +193,21 @@ func TestHandlers(t *testing.T) {
 	t.Run("GetUserFavorites", func(t *testing.T) {
 		for _, tc := range getUserFavoritesTests {
 			t.Run(tc.name, func(t *testing.T) {
-				runTestCase(t, tc)
+				userService := setup()
+
+				// Create a new UserHandler instance
+				userHandler := handlers.NewUserHandler(userService)
+
+				// Create a new Router and register the routes for the UserHandler
+				r := mux.NewRouter()
+				userHandler.RegisterRoutes(r)
+
+				RunTestCase(t, r, tc)
 			})
 		}
 	})
 
-	addUserFavoriteTests := []testCase{
+	addUserFavoriteTests := []TestCase{
 		{
 			name:   "ValidAddUserFavoriteInsight",
 			method: "POST",
@@ -311,12 +318,21 @@ func TestHandlers(t *testing.T) {
 	t.Run("AddUserFavorite", func(t *testing.T) {
 		for _, tc := range addUserFavoriteTests {
 			t.Run(tc.name, func(t *testing.T) {
-				runTestCase(t, tc)
+				userService := setup()
+
+				// Create a new UserHandler instance
+				userHandler := handlers.NewUserHandler(userService)
+
+				// Create a new Router and register the routes for the UserHandler
+				r := mux.NewRouter()
+				userHandler.RegisterRoutes(r)
+
+				RunTestCase(t, r, tc)
 			})
 		}
 	})
 
-	deleteUserFavoriteTests := []testCase{
+	deleteUserFavoriteTests := []TestCase{
 		{
 			name:           "ValidDeleteUserFavorite",
 			method:         "DELETE",
@@ -342,12 +358,21 @@ func TestHandlers(t *testing.T) {
 	t.Run("DeleteUserFavorite", func(t *testing.T) {
 		for _, tc := range deleteUserFavoriteTests {
 			t.Run(tc.name, func(t *testing.T) {
-				runTestCase(t, tc)
+				userService := setup()
+
+				// Create a new UserHandler instance
+				userHandler := handlers.NewUserHandler(userService)
+
+				// Create a new Router and register the routes for the UserHandler
+				r := mux.NewRouter()
+				userHandler.RegisterRoutes(r)
+
+				RunTestCase(t, r, tc)
 			})
 		}
 	})
 
-	editUserFavoriteTests := []testCase{
+	editUserFavoriteTests := []TestCase{
 		{
 			name:   "ValidEditUserFavoriteInsight",
 			method: "PUT",
@@ -474,7 +499,16 @@ func TestHandlers(t *testing.T) {
 	t.Run("EditUserFavorite", func(t *testing.T) {
 		for _, tc := range editUserFavoriteTests {
 			t.Run(tc.name, func(t *testing.T) {
-				runTestCase(t, tc)
+				userService := setup()
+
+				// Create a new UserHandler instance
+				userHandler := handlers.NewUserHandler(userService)
+
+				// Create a new Router and register the routes for the UserHandler
+				r := mux.NewRouter()
+				userHandler.RegisterRoutes(r)
+
+				RunTestCase(t, r, tc)
 			})
 		}
 	})

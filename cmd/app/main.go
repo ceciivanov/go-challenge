@@ -19,16 +19,12 @@ func main() {
 	repo := repository.NewUsersRepository()
 	repo.GenerateSampleUsers(NumberOfUsers, NumberOfAssets)
 
-	// Create a new UserService instance
+	// Create UserService and Handler for it
 	userService := service.NewUserService(repo)
-
-	// Create a new UserHandler instance
 	userHandler := handlers.NewUserHandler(userService)
 
-	// Create a new router from the Gorilla Mux package
+	// Create a new router from the Gorilla Mux package and register the respective routes for the userHandler
 	r := mux.NewRouter()
-
-	// Register the routes
 	userHandler.RegisterRoutes(r)
 
 	// Start the server
