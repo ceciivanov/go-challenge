@@ -193,9 +193,8 @@ func TestHandlers(t *testing.T) {
 	t.Run("GetUserFavorites", func(t *testing.T) {
 		for _, tc := range getUserFavoritesTests {
 			t.Run(tc.name, func(t *testing.T) {
+				// setup userService and userHandler
 				userService := setup()
-
-				// Create a new UserHandler instance
 				userHandler := handlers.NewUserHandler(userService)
 
 				// Create a new Router and register the routes for the UserHandler
@@ -318,9 +317,8 @@ func TestHandlers(t *testing.T) {
 	t.Run("AddUserFavorite", func(t *testing.T) {
 		for _, tc := range addUserFavoriteTests {
 			t.Run(tc.name, func(t *testing.T) {
+				// setup userService and userHandler
 				userService := setup()
-
-				// Create a new UserHandler instance
 				userHandler := handlers.NewUserHandler(userService)
 
 				// Create a new Router and register the routes for the UserHandler
@@ -358,9 +356,8 @@ func TestHandlers(t *testing.T) {
 	t.Run("DeleteUserFavorite", func(t *testing.T) {
 		for _, tc := range deleteUserFavoriteTests {
 			t.Run(tc.name, func(t *testing.T) {
+				// setup userService and userHandler
 				userService := setup()
-
-				// Create a new UserHandler instance
 				userHandler := handlers.NewUserHandler(userService)
 
 				// Create a new Router and register the routes for the UserHandler
@@ -499,9 +496,8 @@ func TestHandlers(t *testing.T) {
 	t.Run("EditUserFavorite", func(t *testing.T) {
 		for _, tc := range editUserFavoriteTests {
 			t.Run(tc.name, func(t *testing.T) {
+				// setup userService and userHandler
 				userService := setup()
-
-				// Create a new UserHandler instance
 				userHandler := handlers.NewUserHandler(userService)
 
 				// Create a new Router and register the routes for the UserHandler
