@@ -16,6 +16,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// Each test case runs on its own instance of the repository, to avoid conflicts between tests.
+
 // testCase struct defines a test case for the handlers
 type TestCase struct {
 	name           string
@@ -26,7 +28,7 @@ type TestCase struct {
 	expectedBody   string
 }
 
-// setup initializes and returns the UserService instance
+// setup initializes and returns the UserService instance with sample data of 3 users and 3 assets each
 func setup() *service.UserService {
 	repo := repository.NewUsersRepository()
 	repo.Users = map[int]models.User{

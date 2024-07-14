@@ -14,6 +14,8 @@ The GlobalWebIndex Engineering Challenge is an application designed to manage us
   - [Endpoints](#endpoints)
   - [Examples](#examples)
 - [Testing](#testing)
+- [Performance](#performance)
+  - [Benchmarking](#benchmarking)  
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -234,3 +236,26 @@ To view the test coverage report in html format on your browser, install the `go
 ```bash
 go tool cover -html=coverage.out
 ```
+
+## Performance
+
+The project's performance is optimized for handling operations on user's favorite assets by using an in-memory data store. The data is mapped to Go structs (Users, Assets), and maps are used for fast lookups. This design ensures that the time complexity of the operations (get, add, update, delete) is O(1). 
+
+#### Current Performance Characteristics
+
+- `In-Memory Data Store`: Using maps to store users and assets allows for constant-time complexity (O(1)) for CRUD operations. This means that the operations are executed very quickly, regardless of the number of users or assets in the system.
+
+- `Initialization Overhead`: While CRUD operations are fast, initializing large datasets can take significant time. This is because the sample data generation involves nested loops to create users and their associated assets, which increases the time complexity of the initialization process.
+
+### Benchmarking
+
+The project includes benchmark tests for the handler layer. Multiple benchmarks are implemented to measure the performance of the API endpoints under different scenarios.
+
+To run the benchmarks, execute the following command:
+
+```bash
+go test -bench=. ./internal/handlers
+```
+
+The benchmarks will run and display the results, including the number of operations per second and the time taken for each operation.
+
