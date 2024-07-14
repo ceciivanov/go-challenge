@@ -125,10 +125,10 @@ The application exposes RESTful endpoints for interacting with user data and fav
 
 The API provides the following endpoints:
 
-- `GET /users/{userID}/favorites`: Retrieve a list of favorite assets for a user.
-- `POST /users/{userID}/favorites`: Add a new asset to a user's favorites.
-- `PUT /users/{userID}/favorites/{assetID}`: Update details of an existing favorite asset.
-- `DELETE /users/{userID}/favorites/{assetID}`: Remove an existing asset from a user's favorites.
+- `GET /users/{userID}/favorites`: Retrieve a list of favorite assets for a user. Expected response is a JSON array of assets.
+- `POST /users/{userID}/favorites`: Add a new asset to a user's favorites. Expected response is a JSON object representing the added asset.
+- `PUT /users/{userID}/favorites/{assetID}`: Update details of an existing favorite asset. Expected response is a JSON object representing the updated asset.
+- `DELETE /users/{userID}/favorites/{assetID}`: Remove an existing asset from a user's favorites. No response body is expected.
 
 ### Examples
 
