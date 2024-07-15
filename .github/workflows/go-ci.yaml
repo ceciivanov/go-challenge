@@ -1,16 +1,22 @@
-name: go-test
+name: go-ci
 
+# Define the event that triggers the workflow
 on:
-  push:
+  workflow_dispatch:  # Run Workflow manually
+  push: # Run Workflow on push to main branch
     branches: [ 'main' ]
-  pull_request:
+    paths-ignore: # Skip trigger on specific paths
+      - 'imgs/**'
+      - 'README.md'
+      - '.github/workflows/**'
+  pull_request:  # Run Workflow on main branch PR
     branches: [ 'main']
 
 jobs:
-  full_ci:
-    strategy:
+  full_ci:  # full ci job
+    strategy:  # Matrix for different go versions
       matrix:
-        go_version: [ 1.22.4 ]
+        go_version: [ 1.22.4 ]  # current go version used for the project
 
     runs-on: ubuntu-20.04
 
@@ -19,7 +25,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
+      # Prepare Go
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
@@ -30,7 +37,8 @@ jobs:
 
       - name: Build
         run: go build -v ./...
-      
+
+      # Install tool to convert go coverage reports to cobertura format
       - name: Install gocover-cobertura
         run: |
             go get github.com/boumenot/gocover-cobertura && go install github.com/boumenot/gocover-cobertura

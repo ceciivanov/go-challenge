@@ -16,8 +16,8 @@ The GlobalWebIndex Engineering Challenge is an application designed to manage us
 - [Testing](#testing)
 - [Performance](#performance)
   - [Benchmarking](#benchmarking)  
-- [Contributing](#contributing)
-- [License](#license)
+- [Concurrency Handling](#concurrent-handling)
+- [Continuous Integration with GitHub Actions](#continuous-integration-with-github-actions)
 
 ---
 
@@ -34,12 +34,14 @@ The project implements a backend service (API) that allows users to:
 
 The project is organized into the following directories:
 
-- `cmd`: Contains the main application entry point.
+- `cmd/`: Contains the main application entry point.
 - `internal/models`: Contains the data models used in the application. 
 - `internal/repository`: Handles data storage and retrieval operations. Implements an in-memory data store and any future data storage mechanisms.
 - `internal/handlers`: Implements HTTP request handlers for the API endpoints.
 - `internal/service`: Implements business logic and interacts with repositories.
 - `internal/utils`: Contains utility functions, like decoding JSON data.
+- `scripts/`: Contains example scripts for interacting with the API.
+- `json/`: Contains sample data for users and assets. Can be used to run examples.
 
 
 ## Dependencies
@@ -63,13 +65,13 @@ To run the application locally, follow these steps:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/ceciivanov/platform-go-challenge.git
+git clone https://github.com/ceciivanov/go-challenge.git
 ``` 
 
 2. Change into the project directory:
 
 ```bash
-cd platform-go-challenge
+cd go-challenge
 git checkout implementation
 ```
 
@@ -98,25 +100,31 @@ To run the application using Docker, follow these steps:
 1. Build the Docker image:
 
 ```bash
-docker build -t platform-go-challenge .
+docker build -t go-challenge .
 ```
 
 2. Run the Docker container:
 
 ```bash
-docker run -p 8080:8080 platform-go-challenge
+docker run -p 8080:8080 go-challenge
 ```
 
 The application will start inside a Docker container and be accessible at `http://localhost:8080`.
 
-3. To stop the container, use the following command:
+3. To stop and delete the container, use the following command:
 
 ```bash
-docker stop <container_id>
+docker container stop <container_id>
+docker container rm <container_id>
 ```
 
-Replace `<container_id>` with the ID of the running container. You can find the container ID by running `docker ps`.
+Replace `<container_id>` with the ID of the running container. You can find the container ID by running `docker ps -a`.
 
+4. To delete the Docker image, use the following command:
+
+```bash
+docker rmi go-challenge
+```
 
 
 ## Usage
@@ -134,7 +142,7 @@ The API provides the following endpoints:
 
 ### Examples
 
-The following examples demonstrate how to interact with the API using `curl` commands.
+The following examples demonstrate how to interact with the API using `curl` commands. There are examples include successful and unsuccessful requests to showcase the API's behavior in different scenarios. You can find them written as bash script in the `/scripts/examples.sh` file. Suggesting to run the commands one by one in the terminal in the order they are written in the script.
 
 ```bash
 # GET existing user favorites
@@ -259,3 +267,64 @@ go test -bench=. ./internal/handlers
 
 The benchmarks will run and display the results, including the number of operations per second and the time taken for each operation.
 
+
+## Concurrency Handling
+
+### Problem Statement
+
+When multiple operations such as adding, deleting, editing, or retrieving user favorites are performed concurrently, it can lead to race conditions. This occurs because the Go map type is not thread-safe, meaning concurrent read and write operations on a map can cause unexpected behavior and data corruption.
+
+### Solution
+
+To address this issue, concurrency control is implemented using `sync.RWMutex`. This approach ensures that the in-memory data structure can handle concurrent access without running into race conditions. 
+
+`RWMutex` provides a mechanism to allow multiple read operations to occur simultaneously while ensuring that that write operations have exclusive access.
+
+- `Lock()`: Acquired before performing write operations to ensure exclusive access.
+- `Unlock()`: Released after the write operation is complete.
+- `RLock()`: Acquired before performing read operations to allow multiple readers.
+- `RUnlock()`: Released after the read operation is complete.
+
+These methods are used in the `InMemoryUserRepository` operations to ensure that:
+- `Add`, `Edit` and `Delete` operations lock the repository for writing to ensure exclusive access during the modification.
+- `Get` operation locks the repository for reading, allowing concurrent read operations but ensuring no write operations occur simultaneously.
+
+### Tests
+To verify the thread safety and correctness of our implementation, concurrent tests are included for each of these operations. These tests simulate multiple goroutines performing the same operation concurrently and check for data consistency and absence of race conditions.
+
+To run the concurrent tests, execute the following command:
+
+```bash
+go test -race ./...
+```
+
+## Continuous Integration with GitHub Actions
+
+This project uses GitHub Actions for continuous integration to ensure that all code changes are built, tested, and code coverage metrics are published. The CI workflow can be triggered manualy (workflow_dispatch event) or automatically on every push to the main branch even on pull requests targeting the main branch. Of course these settings can be changed in the `.github/workflows/ci.yml` file.
+
+### Overview of CI Workflow
+
+The CI pipeline performs the following steps:
+
+- Checkout Code: Checks out the code from the repository.
+- Set Up Go: Sets up the specified version of Go.
+- Install Dependencies: Installs project dependencies.
+- Build: Builds the project.
+- Run Tests: Runs unit tests with race detection and coverage profiling.
+- Convert Coverage Report: Converts the Go coverage report to Cobertura format.
+- Upload Coverage to Codecov: Uploads the coverage report to Codecov. (My Personal Codecov account using github is used and a generated token as github secret)
+- Generate Code Coverage Report: Generates a coverage summary report.
+- Add Coverage PR Comment: Adds a comment to the pull request with the coverage results.
+
+By implementing this CI pipeline, the project ensures that all code changes are tested and that the coverage results are visible to the developers.
+
+In the following screenshot you can see how to run the workflow manually.
+
+![run-workflow](./imgs/run-workflow.png)
+
+### Example of Coverage Report
+
+Following some screenshots of the coverage report generated by the CI pipeline:
+
+![github-actions-tests](./imgs/github-actions-tests.png)
+![Codecov](./imgs/codecov.png)
